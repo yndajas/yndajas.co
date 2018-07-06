@@ -1,0 +1,15 @@
+title: Ynda Jas
+description: Ynda Jas is a queer non-binary academic, activist and creative. Pronouns: they/them/their.
+author: "Ynda Jas"
+facebook: yndajascreative
+instagram: yndajas
+twitter: yndajas
+analytics_id: ADDHERE
+menu:
+  - text: Home
+    url: /
+permalink: pretty
+url: https://yndajas.co
+enforce_ssl: yndajas.co
+plugins:
+  - "jekyll-sitemap"
