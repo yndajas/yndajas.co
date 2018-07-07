@@ -61,6 +61,12 @@
       </ul>
     </nav>
     <main role="main" class="container">
+      {% if page.path contains '_posts' %}
+        <h2>{{ page.title }}</h2>
+        <p>{{ page.date | date: "%A %-d %B %Y" }}<p>
+        <hr>
+      {% else %}
+      {% endif %}
     {{ content }}
     </main>
     <footer class="footer">
