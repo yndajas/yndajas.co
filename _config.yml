@@ -8,6 +8,8 @@ analytics_id: UA-121898351-1
 menu:
   - text: Home
     url: /
+  - text: Pronunciation
+    url: /pronunciation/
   - text: Blog
     url: /blog/
 permalink: pretty
