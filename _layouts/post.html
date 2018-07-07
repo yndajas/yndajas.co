@@ -1,0 +1,82 @@
+<html>
+  <head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ site.analytics_id }}"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '{{ site.analytics_id }}');
+    </script> <!-- end of Google Analytics code-->
+    <!-- favicon code -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/assets/favicons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/favicons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/favicons/favicon-16x16.png">
+    <link rel="manifest" href="/assets/favicons/site.webmanifest">
+    <link rel="mask-icon" href="/assets/favicons/safari-pinned-tab.svg" color="#5bbad5">
+    <link rel="shortcut icon" href="/assets/favicons/favicon.ico">
+    <meta name="msapplication-TileColor" content="#1a237e">
+    <meta name="msapplication-config" content="/assets/favicons/browserconfig.xml">
+    <meta name="theme-color" content="#1a237e">
+    <!-- end of favicon code -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="/assets/styles.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/brands.css" integrity="sha384-VGCZwiSnlHXYDojsRqeMn3IVvdzTx5JEuHgqZ3bYLCLUBV8rvihHApoA1Aso2TZA" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/fontawesome.css" integrity="sha384-GVa9GOgVQgOk+TNYXu7S/InPTfSDTtBalSgkgqQ7sCik56N9ztlkoTr2f/T44oKV" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    {% if page.title %}
+      <title>{{ page.title }} - {{ site.title }}</title>
+    {% else %}
+      <title>{{ site.title }}</title>
+    {% endif %}
+
+    {% include sharing.html %}
+  </head>
+  <body>
+    <a href = "/">
+      <div id="logo-wrapper">
+        <img id="flag" src="/assets/banner.png"/>
+        <div id="central">
+          <img id="logo" src="/assets/logo.png"/>
+        </div>
+      </div>
+    </a>
+    <nav class="navbar navbar-expand-sm navbar-light bg-light rounded">
+      <ul class="navbar-nav centered">
+        {% for item in site.menu %}
+          {% if page.url == item.url %}
+          {% assign is_current = "active" %}
+          {% else %}
+          {% assign is_current = "" %}
+          {% endif %}
+          <li class="nav-item {{ is_current }}">
+            <a class="nav-link" href="{{ item.url }}">
+              {{ item.text }}
+              {% if page.url == item.url %}<span class="sr-only">(current)</span>{% endif %}
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+    <main role="main" class="container">
+      <h2>{{ page.title }}</h2>
+      <p>{{ page.date | date: "%A %-d %B %Y" }}<p>
+      <hr>  
+      {{ content }}
+    </main>
+    <footer class="footer">
+      <div class="container">
+        <span class="left text-muted">
+          © Ynda Jas<span class="d-none d-sm-inline"> {{ site.time | date: '%Y' }}</span> - <a href="/privacy">Privacy<span class="d-none d-sm-inline"> policy</span></a>
+        </span>
+        <span class="right text-muted">
+          <a href="https://facebook.com/{{ site.facebook }}"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://instagram.com/{{ site.instagram }}"><i class="fab fa-instagram"></i></a>
+          <a href="https://twitter.com/{{ site.twitter }}"><i class="fab fa-twitter"></i></a>
+        </span>
+      </div>
+    </footer>
+  </body>
+</html>
