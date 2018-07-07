@@ -8,6 +8,8 @@ analytics_id: UA-121898351-1
 menu:
   - text: Home
     url: /
+  - text: Blog
+    url: /blog/
 permalink: pretty
 url: https://yndajas.co
 enforce_ssl: yndajas.co
