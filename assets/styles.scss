@@ -97,3 +97,11 @@ nav {
     text-align: center;
   }
 }
+
+.blog-image {
+  max-height: 75%;
+  padding-bottom: 1%;
+  img {
+    height: 100%;
+  }
+}
