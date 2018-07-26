@@ -47,12 +47,12 @@
       <ul class="navbar-nav centered">
         {% for item in site.menu %}
           {% if page.url == item.url %}
-          {% assign is_current = "active" %}
+            {% assign is_current = "active" %}
           {% else %}
-          {% assign is_current = "" %}
+            {% assign is_current = "" %}
           {% endif %}
           <li class="nav-item {{ is_current }}">
-            <a class="nav-link" href="{{ item.url }}">
+            <a href="{{ item.url }}" class="nav-link">
               {{ item.text }}
               {% if page.url == item.url %}<span class="sr-only">(current)</span>{% endif %}
             </a>
