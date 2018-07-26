@@ -69,10 +69,6 @@ nav {
       list-style-position: inside;
       display: block;
   }
-  img {
-    width: 100%;
-    display: block;
-  }
 }
 
 .footer {
@@ -99,14 +95,5 @@ nav {
 
   span {
     text-align: center;
-  }
-}
-
-.blog-image {
-  max-height: 75%;
-  width: 100%;
-  padding-bottom: 1%;
-  img {
-    height: auto;
   }
 }
