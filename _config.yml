@@ -12,6 +12,14 @@ menu:
     url: /pronunciation/
   - text: Academia
     url: /academia/
+  - text: "> Research"
+    url: /academia/research/
+  - text: "> Teaching"
+    url: /academia/teaching/
+  - text: "> Education"
+    url: /academia/education/
+  - text: Citation
+    url: /citation/
   - text: Blog
     url: /blog/
 permalink: pretty
