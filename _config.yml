@@ -4,6 +4,9 @@ author: "Ynda Jas"
 facebook: yndajascreative
 instagram: yndajas
 twitter: yndajas
+linkedin: yndajas
+soundcloud: yndajas
+behance: yndajas
 analytics_id: UA-121898351-1
 menu:
   - text: Home
@@ -27,3 +30,4 @@ url: https://yndajas.co
 enforce_ssl: yndajas.co
 plugins:
   - "jekyll-sitemap"
+  - "jekyll-feed"
