@@ -37,10 +37,6 @@ body {
   }
 }
 
-.before-list {
-  margin-bottom: 0;
-}
-
 h2:not(:first-child) {
   padding-top: 2%;
 }
@@ -50,8 +46,6 @@ h4 {
 }
 
 nav {
-  margin-bottom: 2%;
-
   .centered {
     margin: 0 auto;
   }
@@ -59,6 +53,10 @@ nav {
   li {
     white-space: nowrap;
   }
+}
+
+.header {
+  margin-bottom: 2%
 }
 
 @media screen and (max-width: 575px) {
@@ -75,17 +73,9 @@ nav {
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 60px;
-  line-height: 60px;
-  background-color: #f5f5f5;
 
   .right {
     float: right;
-  }
-
-  a {
-    text-decoration: none;
-    color: inherit;
   }
 
   i {
@@ -99,6 +89,14 @@ nav {
 }
 
 .header-img {
-  max-height:60vh;
-  padding-bottom:1%;
+  max-height: 60vh;
+  padding-bottom: 1%;
+}
+
+.before-list {
+  margin-bottom: 0;
+}
+
+.poem-indent {
+  text-indent: 50px;
 }
