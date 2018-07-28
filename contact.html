@@ -1,0 +1,34 @@
+---
+title: Contact
+layout: default
+---
+<h2>Contact</h2>
+<p class="before-list">There are a few ways you can get in contact:</p>
+<ul>
+  <li>via the form below - clicking submit will briefly redirect you to another site to verify you're human;</li>
+  <li>directly via email to <a href="mailto:yndajas@gmail.com?subject=yndajas.co contact">yndajas@gmail.com</a>;</li>
+  <li>by phone, text or WhatsApp on +44 7965 354 610 (but I don't pick up unexpected calls from unknown numbers);</li>
+  <li>via <a href="/social">social media</a> - I'm fairly reliable on Facebook, Instagram and Twitter.</li>
+</ul>
+
+<form action="https://formspree.io/yndjas@gmail.com" method="POST">
+  <div class="form-group">
+    <label for="name">Name:</label>
+    <input type="text" class="form-control" id="name" name="Name" placeholder="Enter name">
+  </div>
+  <div class="form-group">
+    <label for="email">Email:</label>
+    <input type="email" class="form-control" id="email" name="Email" placeholder="Enter email">
+  </div>
+  <div class="form-group">
+    <label for="subject">Subject:</label>
+    <input type="text" class="form-control" id="subject" name="Subject" placeholder="Enter subject">
+  </div>
+  <div class="form-group">
+    <label for="message">Message:</label>
+    <textarea type="text" class="form-control" id="subject" name="Message" placeholder="Enter message"></textarea>
+  </div>
+  <input type="hidden" name="_subject" value="yndajas.co contact" />
+  <input type="hidden" name="_next" value="/message-submitted" />
+  <button type="submit" class="btn btn-default">Submit</button>
+</form>
