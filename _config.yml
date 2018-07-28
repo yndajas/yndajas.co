@@ -21,6 +21,10 @@ menu:
     url: /academia/teaching/
   - text: "> Education"
     url: /academia/education/
+  - text: Activism
+    url: /activism/
+  - test: "Professional experience"
+    url: /professional/
   - text: Citation
     url: /citation/
   - text: Blog
