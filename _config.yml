@@ -12,24 +12,18 @@ analytics_id: UA-121898351-1
 menu:
   - text: Home
     url: /
-  - text: Pronunciation
-    url: /pronunciation/
-  - text: "Academia&#58;"
+  - text: Name
+    url: /name/
+  - text: Academia
     url: /academia/
-  - text: "> Research"
-    url: /academia/research/
-  - text: "> Teaching"
-    url: /academia/teaching/
-  - text: "> Education"
-    url: /academia/education/
   - text: Activism
     url: /activism/
   - text: "Professional experience"
     url: /professional/
-  - text: Citation
-    url: /citation/
   - text: Blog
     url: /blog/
+  - text: Contact
+    url: /contact/
 permalink: pretty
 url: https://yndajas.co
 enforce_ssl: yndajas.co
