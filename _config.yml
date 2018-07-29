@@ -14,10 +14,10 @@ menu:
     url: /
   - text: Name
     url: /name/
-  - text: Academia
-    url: /academia/
   - text: Activism
     url: /activism/
+  - text: Academia
+    url: /academia/
   - text: "Professional experience"
     url: /professional/
   - text: Blog
