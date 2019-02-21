@@ -58,30 +58,6 @@
 
     <!-- navbars that collapse to button on small screens -->
 
-    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#mainmenu" aria-expanded="false">
-      <span class="sr-only">Toggle navigation</span>
-      <i class="fa fa-2x fa-bars"></i>
-    </button>
-    <nav>
-      <div class="collapse navbar-collapse" id="mainmenu">
-        <ul class="list-separator nav navbar-nav well well-primary default">
-          {% for item in site.menu %}
-            {% if page.url == item.url %}
-              {% assign is_current = "active" %}
-            {% else %}
-              {% assign is_current = "" %}
-            {% endif %}
-            <li class="nav-item {{ is_current }}">
-              <a href="{{ item.url }}" class="nav-link">
-                {{ item.text }}
-                {% if page.url == item.url %}<span class="sr-only">(current)</span>{% endif %}
-              </a>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-    </nav>
-
     <nav class="navbar navbar-expand-sm navbar-light bg-light rounded header">
       <div class="container">
         <span class="left">
@@ -115,55 +91,6 @@
         </span>
       </div>
     </nav>
-    <!-- end navbars that collapse to button on small screens -->
-
-    <!-- non-expandable navbar (in place for small-screen navigation while expandable navbars are tested) -->
-    <nav class="navbar navbar-expand-sm navbar-light bg-light rounded">
-      <div class="container">
-        <span class="left">
-          <ul class="navbar-nav centered">
-            {% for item in site.menu %}
-              {% if page.url == item.url %}
-                {% assign is_current = "active" %}
-              {% else %}
-                {% assign is_current = "" %}
-              {% endif %}
-              {% if item.sublinks %}
-                <li class="nav-item {{ is_current }} dropdown">
-                  <a href="{{ item.url }}" class="dropdown-toggle nav-link" >
-                    {{ item.text }} <span class="caret"></span>
-                    {% if page.url == item.url %}<span class="sr-only">(current)</span>{% endif %}
-                  </a>
-                  <ul class="dropdown-menu">
-                    {% for sublink in item.sublinks %}
-                      <li>
-                        <a href="{{ sublink.url }}">{{ sublink.title }}</a>
-                      </li>
-                    {% endfor %}
-                  </ul>
-                </li>
-              {% else %}
-                <li class="nav-item {{ is_current }}">
-                  <a href="{{ item.url }}" class="nav-link">
-                    {{ item.text }}
-                    {% if page.url == item.url %}<span class="sr-only">(current)</span>{% endif %}
-                  </a>
-                </li>
-              {% endif %}
-            {% endfor %}
-          </ul>
-        </span>
-        <span class="right">
-          <ul class="navbar-nav centered">
-            <li class="nav-item">
-              <a href="/search" class="nav-link"><i class="fas fa-search"></i> Search</a>
-            </li>
-          </ul>
-        </span>
-      </div>
-    </nav>
-
-    <!-- end non-expandable navbar (in place for small-screen navigation while expandable navbars are tested) -->
 
     <main role="main" class="container">
       {% if page.path contains '_posts' %}
@@ -222,7 +149,8 @@
       </nav>
     </footer>
   	<!-- JavaScript links placed at the end of the document so the pages load faster -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" type="text/javascript"></script>
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" type="text/javascript"></script>
+    <!-- JavaScript links placed at the end of the document so the pages load faster -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   </body>
 </html>
