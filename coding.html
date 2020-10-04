@@ -1,0 +1,12 @@
+---
+title: Coding
+layout: default
+permalink: /blog/categories/coding/
+---
+<h2>Coding</h2>
+
+<p>
+{% for post in site.categories.coding %}
+<a href="{{ post.url }}">{{ post.title }}</a> ({{ post.date | date: "%A %-d %B %Y" }})<br>
+{% endfor %}
+</p>

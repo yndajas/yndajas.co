@@ -1,0 +1,58 @@
+---
+title: "Coming to coding, chasing the challenge and tic-tac-toe with AI"
+date: 2020-10-04
+layout: default
+categories: coding
+---
+
+<p>This is the first in a series of posts I plan to write about my own journey of learning to code.</p>
+
+<h4>Coming to coding</h4>
+
+<p>Last February, I decided that my PhD and academia weren't really working out for me and that I needed to take a step back. Somewhat ironically, both my first book chapter (in 'Non-Binary Lives: An Anthology of Intersecting Identities') and my <a href="https://www.budrich-journals.de/index.php/insep/article/view/35952" target="_blank" title="Sexuality in a non-binary world: redefining and expanding the linguistic repertoire">first academic journal article</a> [<a href="https://www.budrich-journals.de/index.php/insep/issue/view/2731" target="_blank" title="Positive non-binary and / or genderqueer sexual ethics and politics">issue</a>] ended up coming out this year. I have no regrets about putting my PhD on pause, but this and other publishing activity did go some way to reinvigorating my interest in research and writing. Part of what motivated the journal article, and what makes me want to write more, is identifying a problem and creatively and rigorously working through it to find or propose a solution - or just ask further, important questions. That's the approach I took to identifying how and why we might expand the language (and underlying conceptual frameworks) of sexuality to recognise the diversity and mesmerising complexity of gender beyond (and within) the binary. A fondness for that way of thinking and working - creative problem-solving - is also partly what drew me to coding. The experience I've had with markup and particularly statistical programming languages in the past has filled me with the feeling that this is the kind of work I could do all day and not get bored.</p>
+
+<p>Soon after taking a step back from academia, I started looking into coding bootcamps, eventually settling on Flatiron School. My plans for starting their software engineering bootcamp moved backwards and forwards as a result of employment and the COVID-19 pandemic. In the end, I decided to go self-paced and start this summer. After feeling relatively unchallenged by the first few modules and reading about a well-reviewed and free online computer science course, I also decided to pick up Harvard's CS50.</p>
+
+<h4>Chasing the challenge</h4>
+
+<p>One thing that struck me after week one (or 'week 0') of CS50 was that after being presented with a problem, it's up to you to work out almost all of the logic of implementing a solution... in C. The scaffolding and safety of Ruby's many in-built classes and methods (and those brought in through gems) swiftly fell away, leaving me to learn how to scale a building all on my own (where are the radioactive spiders when you need them?). That extra challenge - perhaps unsurprisingly - made me want to complete the harder problem sets (and then the easier ones after!). There's something deeply enticing about having to work out functions for seemingly simple tasks like calculating the length of a string and checking whether a number is odd or even, and then stringing such functions together to implement solutions to larger problems such as validating a credit card number using Luhn's algorithm, determining the readability level of a passage or dynamically ciphering text.</p>
+
+<p>That feeling of real challenge started coming through with Flatiron as the curriculum began to delve beyond the surface of object-oriented programming. For most of the coding labs, you tend to be guided towards a solution either through explicit instruction or by a well-built test suite (the merits of test-driven development become clear early on). It wasn't until near the end of the object-oriented Ruby module - just before the first major independent project - that I encountered a lab that I really needed to spend more than a day on: tic-tac-toe with AI. The lab is intended to be done in pairs, but as a self-paced student with an irregular schedule and an appetite for challenge, I decided just to go it alone.</p>
+
+<h4>Tic-tac-toe with AI</h4>
+
+<p>The task involves creating three main modes of tic-tac-toe: player vs player, player vs computer and computer vs computer. Starting with the test suite, everything seemed fairly straightforward. However, once you get to the AI part of the problem - i.e. the code to control the computer player(s) - much like in CS50, it's all on you. At first I thought about just doing the bare minimum - build some methods that play valid moves without regard to whether they were good (or the best) moves. That attitude lasted a few minutes - I <em>needed</em> to work out a way to make it more complicated. So I continued, researching unbeatable tic-tac-toe strategies (there's a hierarchy of moves you can follow in order to at least draw every game - more on this below), thinking through how I could implement these in code and ultimately learning new ways of using Ruby that Flatiron hadn't yet covered in order to perfect the AI.</p>
+
+<p>The lab is prestructured to include Board, Game and Player classes, plus Computer and Human subclasses that inherit basic functionality from the Player class. The process of getting the test suite to pass involves building out these classes to the extent that the game works, but with minimal AI - the computer player simply needs to return a valid move. Building the user interface - i.e. the command-line interface elements - complexifying the AI to the extent that it can never lose, and deciding when to stop is up to you.</p>
+
+<p>I decided to add one more class: GameController. This class handles asking the user for the number of human players and in single player mode, whether the human player or computer player should go first and who should use which token (X/O). It then creates a new game instance with these settings, and once the game is complete, offers to start a new game or quit. While this could have been incorporated into the Game class itself, conceptually I viewed the Game class as a model of games from start to finish, with what happens before and after a game falling outside of that model. Pre- and post-game control could also live within the executable file itself, however owing to the complexity of the setup process, it felt more logical to contain the relevant code within multiple methods of a discrete class.</p>
+
+<p>As I've already indicated, the hardest part of building a tic-tac-toe app with computer players is working out how to program the AI logic. My research led me to the following hierarchy of moves. If you play whichever valid move is highest in the hierarchy, it's impossible for the opponent to win (though a draw is possible and indeed inevitable if the opponent follows the same strategy).</p>
+
+<p class="before-list"><strong>Unbeatable strategy</strong></p>
+<ol style="font-weight: bold">
+  <li>win: <span style="font-weight: normal">play a winning move</span></li>
+  <li>block: <span style="font-weight: normal">prevent a winning move on the next turn</span></li>
+  <li>fork: <span style="font-weight: normal">play a move that will opens up two winning moves (i.e. two lines with two cells occupied by your token and none by your opponent's)</span></li>
+  <li>block fork: <span style="font-weight: normal">play a move that will stop the opponent playing a fork</span></li>
+  <li>centre: <span style="font-weight: normal">play the centre cell</span></li>
+  <li>opposite corner: <span style="font-weight: normal">if your opponent has occupied a corner, play the opposite corner</span></li>
+  <li>corner: <span style="font-weight: normal">play a corner</span></li>
+  <li>side: <span style="font-weight: normal">play a side</span></li>
+</ol>
+
+<p>Much of this is pretty straightforward. For winning and blocking, check if two cells in a line are the same token with the other empty. For the bottom four options, check if specific cells are empty or occupied by your opponent's token. Forking and blocking forks, however, is where things get a lot more complicated.</p>
+
+<p>For forking, the idea is that since the opponent can only place their token in one cell on their next turn, you can win on your next turn by creating a situation where there are two cells that they would need to block to prevent a loss. My solution involved checking which lines do not contain the opponent's token but do contain your own. I then iterated over these lines and added any valid moves (empty cells) to an array - if a valid move appeared in multiple lines, it would be added once per line it appeared in. I then looked for valid moves that appeared in multiple lines and if there were any, played one of them.</p>
+
+<p>That might sound a little complicated, but the idea is relatively simple: if different lines each have one cell with your token, and they have a shared empty cell, playing that empty cell will leave only one (empty) cell without your token in both lines. The opponent can only block one of these, setting you up for a win on your next move.</p>
+
+<p>The harder part was working out how to program the AI to block a fork. For hours I tried out multiple different methods that improved the complexity of the AI, but none of them fully accounted for every possible move, leaving exploits open to abuse. What I was missing was a way to simulate every possible next move and then check for forks, before reporting back which moves allowed a fork to be played. My eventual solution was to create a duplicate copy of the board, play each valid move in turn and check on the next move whether the opponent could play a fork.</p>
+
+<p>Creating a duplicate copy of the board proved harder than expected - at first every approach I tried 'passed by reference' in one way or another, meaning my duplicate copy's cells attribute was the same object as the board-in-play's cells attribute. Changing the duplicate would change the original. Perhaps I could've come up with a messy solution where I made a change and then reverted it, but that <em>feels</em> wrong. Eventually my research led me to work out that I needed to create a ('deep') copy the cell's values (collecting them into a new array) rather than of the whole object or array itself, then create a new board and set its cells attribute equal to these values.</p>
+
+<p>While on many occasions throughout this build I thought about moving on to the next lab, it was always at most a matter of minutes before my thoughts shifted to "but what if...?" and my screen shifted to Chrome, Google and eventually Stack Overflow. The drive to work through, creatively solve and learn from problems in the process of building <em>stuff</em> is I hope what will make coding a long-term pursuit, profession and - most of all - passion. Next stop: minesweeper?</p>
+
+<p><iframe width="560" height="315" src="https://www.youtube.com/embed/_M3nB_ZpLBE" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
+
+<p>You can watch a demo of the final result in action above and check out (and clone) the <a href="https://github.com/yndajas/ttt-with-ai-project-online-web-sp-000" target="_blank" title="tic-tac-toe with AI GitHub repository">project code on GitHub</a>.</p>
