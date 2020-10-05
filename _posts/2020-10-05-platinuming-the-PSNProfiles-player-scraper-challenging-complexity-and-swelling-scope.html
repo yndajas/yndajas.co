@@ -1,0 +1,90 @@
+---
+title: "Platinuming the PSNProfiles player scraper: challenging complexity and swelling scope"
+date: 2020-10-05
+layout: default
+categories: coding
+---
+
+<p>Soon after completing my implementation of <a href="http://yndajas.co/coding/2020/10/04/coming-to-coding-chasing-the-challenge-and-tic-tac-toe-with-AI" title="Coming to coding, chasing the challenge and tic-tac-toe with AI">tic-tac-toe with AI</a> for a Flatiron lab, it was time to start working on my first major independent project. In the last couple months, a lot of my time has been taken up with moving and settling in to a new flat. Before the move I was only a few lessons and labs away from the project, and I think the feeling that I might have forgotten how to work with Ruby combined with not really having a sense of the required scale of the project led me to <strike>start procrastinating</strike> put my return to the bootcamp off a little bit longer than I really needed.</p>
+
+<p>Well, coming off the back of a somewhat straightforward scraping lab, reading the requirements for the project led me to wonder what the big deal was. What, I just need to scrape some data and let a user choose what they want to see? That should only take a few hours! What I didn't account for was that when an idea for an app that would touch on my own interests came into my head, my own interests - as well as an inquisitive inclination and a wealth of data - would lead me to expand the scope of the project again and again and again.</p>
+
+<h4>Scope and structure</h4>
+
+<p>So my original idea was to pull some data from <a href="https://psnprofiles.com" target="_blank" title="PSNProfiles">PSNProfiles</a> player pages and let the user pick a player and view their data. PSNProfiles is a website that presents information about the games played and trophies earned by players on PlayStation 3, PlayStation 4 and PlayStation Vita. I'm a bit of a 'trophy hunter' and have been a fan of the PSNProfiles interface for a few years now. Not long after the initial idea came to me, I decided to add more data and allow the user to choose what to view. Then I decided to add a feature for comparing two players. Then a friend (a fellow PlayStation gamer and coder) suggested adding an option to export (individual player) data to XML or JSON. Why not? Then I decided to add the ability to change the player without restarting the app. The final interface of the app is structured as below.</p>
+
+<ul>
+  <li>Choose player</li>
+  <ul>
+    <li>View data</li>
+    <ul>
+      <li>Basics</li>
+      <li>Totals</li>
+      <li>Summaries</li>
+      <li>Length of service</li>
+      <li>Collections</li>
+      <ul>
+        <li>Recent trophies</li>
+        <li>Recent games</li>
+        <li>Rarest trophies</li>
+      </ul>
+    </ul>
+    <li>Export data</li>
+    <li>Compare with another player</li>
+    <li>Change player</li>
+  </ul>
+</ul>
+
+<p>Navigating through this structure, as well as user interaction and scraping, viewing and exporting data, is handled by three classes - CommandLineInterface, Player and Scraper - and a (very basic) executable file.</p>
+
+<h4>Challenges</h4>
+
+<p>In my last blog post (linked above), I spoke about how engaging I found the challenge of building tic-tac-toe with AI and various CS50 problem set solutions. I find that challenge and working out how to build things with methods and approaches I haven't yet learned the tools to fully execute really drive my desire to keep coding. This project had far too many challenges to cover them all in great detail, so below I've summarised a few in three different categories.</p>
+
+<h5>Beyond/across classes</h5>
+
+<ul>
+  <li>Project set up and working in a local environment: working out how the Gemfile and environment.rb files should be configured and what terminal/command-line interface commands need to be executed to get things going both for me as the developer and for users<br><br></li>
+
+  <li>Validation</li>
+  <ul>
+    <li>Validating user input in menus and app functions<br><strong>Solution:</strong> using <code>until</code> and <code>puts</code> to guide the user to provide valid input<br><br></li>
+    <li>Validating that a player profile exists and has public trophies<br><strong>Solution:</strong> identifying page content or HTML elements that are unique to each case of an invalid or unscrapable player, and referring the user to the README for reasons a real player might not yet be scrapable<br><br></li>
+    <li>Validating that a directory exists in the export function<br><strong>Solution:</strong> using <code>Dir.exist?</code><br><br></li>
+  </ul>
+  <li>Returning to the CommandLineInterface's main menu from sub-menus and app functions within the Player class<br><strong>Solution:</strong> passing in the instance of the CommandLineInterface (<code>self</code>) as an argument/'cli' parameter when moving to the Player class, so calling <code>cli.main_menu</code> would return to the same instance of CommandLineInterface, in turn retaining knowledge of the Player instance(s) it should work with</li>
+</ul>
+
+<h5>Scraper</h5>
+
+<p>Scraping was the first challenge I decided to tackle in building this app. Much of this was just like the scraping labs I'd already completed: take a URL, have Nokogiri parse it, then grab what you want by working out what HTML/CSS element, class, attribute, parent/grandparent element or any combination of the above distinguish the data you're after from the rest of the page. However, as the scope of the project grew, the extra data sources brought in a few different challenges, as outlined below.
+
+<ul>
+  <li>Scraping a series of data - recent games - and then iterating over it to collect the first 12 instances, or less if there are fewer than 12 instances<br><br></li>
+  <li>Scraping fields or elements that appear on some profiles but not others, or provide different types or formats of data dependent on the game or player's activities, then storing and displaying data of different classes within the same field/attribute<br><br></li>
+  <li>Changing the format of multiple different scraped dates<br><strong>Solution:</strong> using the DateTime class to parse the text and store it as an instance of that class, then using its <code>strftime</code> method to display dates in my preferred format</li>
+</ul>
+
+<h5>Player</h5>
+
+<p>When the scraper was finished, I had a hash with around 30 key-value pairs, and further hashes and arrays nested within. Challenges that arose in dealing with this complex data structure and other aspects of the Player class are detailed below.</p>
+
+<ul>
+  <li>Creating readers to account for all the top-level and nested data<br><strong>Solution:</strong> adding all the attributes to an <code>attr_accessor</code> line, then combining the resulting reader methods with metaprogramming using <code>send</code> to assign all the top-level data to instance variables. For nested data, manual reader methods that use the top-level/instance variable readers and then dive deeper<br><br></li>
+  <li>Dividing the wealth of data up into sensible and not overwhelmingly large groups to present to users, and interpolating everything into <code>puts</code> statements with clear, user-friendly presentation<br><br></li>
+  <li>Exporting to XML/JSON</li>
+  <ul>
+    <li>Accounting for the different ways a user could specify a directory, in particular whether they include a slash at the end<br><strong>Solution:</strong> checking the last character of the user's input by calling <code>[-1]</code> on the string, then adding a slash if there isn't one<br><br></li>
+    <li>Transforming instance variables (back) into a hash to pass into the export methods<br><strong>Solution:</strong> using the <code>instance_variables</code> method on <code>self</code> to get all the instance variable names, then iterating over them, removing the <code>@</code> and collecting the result of <code>instance_variable_get</code> into a new hash<br><br></li>
+    <li>Not overwriting files if the user has previously exported a player's data<br><strong>Solution:</strong> using <code>File.exists?</code> to check if the default filename exists in the directory, and if it does, finding a number that can be appended that won't also result in an existing filename<br><br></li>
+  </ul>
+  <li>Working with two Player instances at the same time to <code>puts</code> the same data for each instance side by side</li>
+</ul>
+
+<h4>The result</h4>
+
+<p>The result of navigating all these and more challenges - and putting in the hours to work through the less challenging but equally time-consuming task of building out all the methods to deal with scraping and displaying all the data - can be seen in the demo below. You can also check out (and clone) the <a href="https://github.com/yndajas/PSNProfiles-player-scraper" target="_blank" title="PSNProfiles player scraper GitHub repository">project code on GitHub</a>.
+
+<p> </p>
+<p style="position: relative; padding: 30px 0px 57% 0px; height: 0; overflow: hidden;"><iframe src="https://www.youtube.com/embed/l1yA_LfLz-c" width="100%" height="100%" frameborder="0" style="display: block; margin: 0px auto; position: absolute; top: 0; left: 0;" allowfullscreen></iframe></p>
+<p> </p>
