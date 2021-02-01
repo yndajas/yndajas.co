@@ -1,0 +1,102 @@
+---
+title: "Sinatra and the Racqueteer: crafting my first model-view-controller web app"
+date: 2021-02-01
+layout: default
+categories: coding
+---
+
+<p class="before-list">The second major independent project of the Flatiron software engineering bootcamp requires that you build a Sinatra-based model-view-controller web app with ActiveRecord integration. Initial ideas included:</p>
+<ul>
+  <li>a shopping wishlist management tool, with the ability to record items, priority, and prices and links at different stores</li>
+  <li>a DJ playlister, which could build on previous music library Flatiron labs by introducing users, playlists and links to the songs, artists and genres models</li>
+</ul>
+
+<p class="before-list">In the end, however, I decided to build an app that would allow you to keep track of your racquet sports activities by:</p>
+<ul>
+  <li>recording and reviewing your matches, coaching and racquets</li>
+  <li>accessing breakdowns of each by sport, opponent, coach and more</li>
+</ul>
+
+<h4>Models, migrations and modules</h4>
+
+<p>The only problem with this domain idea was that it's one I'm pretty familiar with, which led to building a fairly large and complex object-relational map - relative to what I've worked on so far - as can be seen in the entity relationship diagram below. Two PDF versions are available for a clearer view: <a href="/assets/resources/Racqueteer_erd_landscape.pdf" target="_blank">landscape</a> | <a href="/assets/resources/Racqueteer_erd_portrait.pdf" target="_blank">portrait</a>.</p>
+
+<div class="container d-flex justify-content-center">
+  <img src="/assets/images/Racqueteer_erd_portrait.png" alt="Entity relationship diagram">
+</div>
+
+<p class="before-list">Almost all 15 models (or objects, or entities) have different relationships, which required some careful modelling of relationships and construction of migrations. Relationships in Racqueteer include:</p>
+<ul>
+  <li><em>belongs to/has many:</em> everything except low-level join tables and results (as a closed class) belong to a user, enabling the user to edit all of their data without affecting other users' data. As well as belonging to users, locations, opponents, sports, and results have many matches and/or coaching sessions, and racquets in the case of sports</li>
+  <li><em>many-to-many/has many through:</em> coaches and coaching sessions, and racquets and matches have many-to-many relationships, and therefore join tables exist to map their relationship (leading to has many through relationships)</li>
+  <li><em>join tables:</em> racquets are essentially join tables for sports, frame brands/models and string brands/models (containing only an ID and foreign keys), but they have a belongs to/has many relationship with each of these entities differing from the many-to-many relationship with matches</li>
+</ul>
+
+<p>I created a couple of modules to support the models that contain name attributes. The first added functionality covered in Flatiron labs: generating slugs by name and finding instances by slug. The second module required, included and extended the first and established a belongs to relationship with users, avoiding repeating these elements of code in models with shared behaviour/relationships. The latter took a while to figure out, but I eventually discovered the concept of 'base' in modules, and used the method <code>self.included(base)</code> and within that methods <code>base.send</code>, <code>base.extend</code>, <code>base.include</code> and <code>base.belongs_to</code> to do the rest.</p>
+
+<h4>Controllers</h4>
+
+<p>Sitting between the complex models and complex views (more on that later), the controllers had to do some heavy lifting. The varying relationships between different models had implications on controller logic, one prime example being methods that invoked SQL queries in order to feed lists of objects, either on index or show pages or in providing options for inputs based on existing data. I used SQL methods - mostly in helper blocks - in order to sort and filter the data in a sensible way, which would've been harder to achieve using more standard Ruby and ActiveRecord methods. A number of these methods could feed data to views from multiple controllers, however some controllers needed unique sorting or filtering and therefore custom code. Figuring out the similarities and differences between the needs of different controllers and views was an ongoing process throughout development, requiring refactoring of code both to select additional columns in SQL queries and to move the methods between controllers.</p>
+
+<p class="before-list">In addition to helper methods, I also made use of <code>before</code> hooks to preprocess requests, including:</p>
+<ul>
+  <li>removing any trailing slashes from request paths unless the request is for the root ('/')</li>
+  <li>making all request paths lower case</li>
+  <li>redirecting to the homepage when logged out unless the request path is '/', '/login' or '/register', or '/users' with a method of 'POST'</li>
+  <li>removing leading/traling whitespace in params - though this is only a secondary safeguard, since this should be dealt with via JavaScript (more later)</li>
+</ul>
+
+<p>Another area of complexity within the controllers was destroying associated data. The app allows users to directly request instances of each model except the low-level join tables and results to be destroyed. However, since I chose to require almost all fields for every model, this meant destroying associated data. In the case of racquets, it's not enough to simply destroy a racquet's matches and match racquets, since that would leave behind any match racquets belonging to other racquets but the same match. In order to account for these, I iterated over a racquet's matches (using the ActiveRecord methods added by the has many through relationship), destroying all of each match's match racquets and then the match, before destroying the racquet. Effectively I went through the join table, then looked back at it from the other side. The same applied to coaches and coaching sessions.</p>
+
+<h4>Views</h4>
+
+<p>With the views, I tried to step things up from what I'd done before, integrating embedded Ruby (ERB) logic, dynamic forms, CSS and JavaScript to create a sense of polish in the user interface (and user experience). Since this post is already pretty long and there are lots of things I could cover here, I'll stick to listing some of the key technologies and features.</p>
+
+<h5>HTML and ERB</h5>
+<ul>
+  <li>conditional logic to include or exclude elements based on data fed from the controller</li>
+  <li>layout file with:
+    <ul>
+      <li>external styles (Bootstrap) and scripts (jQuery, Bootsrap)</li>
+      <li>custom styles and scripts, with two scripts loaded near the end of the document in order to operate on elements already loaded into the document object model</li>
+      <li>favicon inclusion including device-specific specification</li>
+      <li>multiple yield blocks (using 'sinatra/content_for' from the sinatra-contrib gem)</li>
+    </ul>
+  </li>
+  <li>adding links on show/index pages to the respective show pages of every piece of modelled data mentioned on the page, except those in headings</li>
+  <li>a range of HTML input types, with options provided based on existing associated ata</li>
+</ul>
+
+<h5>CSS</h5>
+<ul>
+  <li>Bootstrap, including use of different classes for positioning, navbar elements and other styling of specific elements</li>
+  <li>custom bullets, using tennis emoji!</li>
+  <li>softer-looking inputs, with a lighter, thicker border, rounded edges and more padding</li>
+  <li>background images</li>
+</ul>
+
+<h5>JavaScript</h5>
+<ul>
+  <li>validating inputs for all four (or none of the four) of frame brand/model and string brand/model have been completed for new racquets</li>
+  <li>validating that at least one existing or new racquet for each match and coach for each coaching session is provided, while not requiring that both are provided</li>
+  <li>cloning inputs to add extra new racquets and coaches (while retaining unique IDs to retain label functionality)</li>
+  <li>toggling the background between a colour image, a monochrome image and plain white</li>
+  <li>warning and confirming before destroying data with a popup</li>
+  <li>removing leading/trailing whitespace in inputs on blur (when exited)</li>
+</ul>
+
+<h4>Deployment</h4>
+
+<p>Lastly, I decided to try deploying the app via Heroku. Beyond trying to find clear documentation on how to do this (and particularly how to do it with Sinatra versus Rails), I encountered a couple of hurdles in achieving this.</p>
+
+<p>First, SQLite is not accepted. SQLite contrasts with many alternative SQL implementations in that it stores the database within the app's own directory, rather than on a dedicated database server. Heroku does not accept this in production environments - i.e. for publishing on their platform - and recommends PostgreSQL. I had no idea how to do this, and found the documentation equally mystifying at first. Eventually I figured out how to get this set up locally through my Windows Subsystem for Linux setup and could test the app. Interestingly, when serving the app locally while using PostgreSQL, some SQL query typos broke the app in a way that was not the case with SQLite.</p>
+
+<p>Once PostgreSQL was sorted, I tried deploying the app again, and it made it through the deployment process! However, when I opened the app on Heroku, it returned a generic error code meaning <em>something</em> is wrong. Something. Yay! After a bunch more research, I realised I was missing the essential 'Procfile', which tells Heroku what command to run to start up your app. The only problem was I didn't know what to put in that file... Eventually I thought of looking at the GitHub repository of another Flatiron Sinatra project I'd seen deployed on Heroku (Aurangzaib Danial's <a href="https://catchup-rss.herokuapp.com" target="_blank">Catchup!</a> RSS reader), and copying that was a success!</p>
+
+<hr>
+
+<p>Below is a demo of the app, which is hosted on Heroku and can be accessed via <a href="http://racqueteer.yndajas.co" target="_blank">racqueteer.yndajas.co</a> (you will be redirected to Heroku).</p>
+
+<p> </p>
+<p style="position: relative; padding: 30px 0px 57% 0px; height: 0; overflow: hidden;"><iframe src="https://www.youtube.com/embed/nK35Tuxfkso" width="100%" height="100%" frameborder="0" style="display: block; margin: 0px auto; position: absolute; top: 0; left: 0;" allowfullscreen></iframe></p>
+<p> </p>
