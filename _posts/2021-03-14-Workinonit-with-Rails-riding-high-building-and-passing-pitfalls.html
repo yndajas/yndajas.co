@@ -1,0 +1,76 @@
+---
+title: "Workinonit with Rails: riding high, building and passing pitfalls"
+date: 2021-03-14
+layout: default
+categories: coding
+---
+
+<p>In the third major independent project of the Flatiron software engineering curriculum, students are tasked with building an app using the Ruby on Rails framework. The app should be some kind of content management system incorporating complex forms managing associated data with the help of RESTful routes.</p>
+
+<p class="before-list">I decided to build a web app that allows users to manage their search for a job without having to deal with spreadsheet software, disorganised notes or uncoordinated chaos. With <a href="http://workinonit.yndajas.co" target="_blank">Workinonit</a> - the name an ode to extraordinary music producer J Dilla - users can:</p>
+<ul>
+  <li>find jobs by keywords (e.g. job title) and location</li>
+  <li>add jobs by URL or manual entry</li>
+  <li>keep track of progress on job applications</li>
+  <li>save and review feedback from and notes on companies</li>
+</ul>
+
+<h4>Riding the Rails</h4>
+
+<p>Moving to Rails for this project required learning a lot of new syntax and ways of working, but the more you immerse yourself in its "convention over configuration" approach, the more you can start to focus on only the customisation that actually matters to your project.</p>
+
+<p class="before-list">Approaches that differed from the Sinatra framework included:</p>
+<ul>
+  <li>separating out <strong>route definition</strong> from <strong>controller actions</strong>, and <strong>implicit rendering</strong>. This leads to cleaner-looking controllers, free from all the route specification and calls to render templates where they follow standard RESTful conventions</li>
+  <li><strong>helper methods</strong> and <strong>before actions</strong>. In the Sinatra app I'd made significant use of before hooks, but in Rails you can define private methods for use both within the controller and before any controller actions fire using the <code>before_action</code> specification. The <code>helper_method</code> declaration also allows you to be more explicit about which methods to make available to views</li>
+  <li>using <strong>Rails helpers</strong> in controllers but particularly views. The most useful of these are arguably things like <code>link_to</code> combined with path (or URL) helpers, allowing you to reference paths to particular routes by name rather than by typing the actual route out everywhere - much DRYer! In the end, I decided to go all out and write 99% of the views using Rails tag helpers. This might be overkill, but it does <em>feel</em> pretty nice, and leads to a more consistent syntax than would be the case with more of a mix of raw HTML and Rails helpers</li>
+</ul>
+
+<h4>Building on before</h4>
+
+<p>The streamlining offered by Rails provided more space to build on and extend existing skills and knowledge. The project have me a chance to solidify my grasp on how to apply the <strong>model-view-controller</strong> paradigm within real domains. Within this project, I tried to think more carefully about the separation of concerns principle. Where in the last project I had a bit of an blurred distinction between the roles of my models, controllers and views, with some heavy custom SQL querying going on in the controller and in some cases some significant data manipulation in the views, this time I tried to keep that to a minimum. Models handled the majority of data-focused logic and controllers flow-based logic, with views handed more instance variables with data properly prepared, leaving a much smaller amount of logic focused on hiding/showing elements based on the data being passed from the controller. I'm still not 100% confident the balance is quite right - perhaps the concerns could be even more straightforwardly separated, but it feels like a significant step forward from the last project.</p>
+
+<p>In the last project, all but one <strong>model</strong> either belonged to users, or belonged to a model that belonged to users. In this app, there's still no real user-to-user interaction, but I thought about how some data might not need to be unique for every user, which in a production environment may save database space by avoiding duplication of data, and allow for potential future expansion into user interaction experience. I made almost all pages require login with the exception of scraped webpages, meaning users could <strong>share</strong> a job they've found. Having jobs not belong to a user, and having one record per scraped job listing no matter how many times it's scraped, means that there will only ever be one URL tied to that job... unless some key details change, leading to unique records for a single job. This also offers the potential for tracking how many users have saved/are interested in a particular job, which could open up opportunity for further interesting informational features down the line. An entity relation diagram representing the app's models is below; you can also open the diagram as <a href="/assets/resources/Workinonit_erd.pdf" target="_blank">a PDF</a>.</p>
+
+<div class="container d-flex justify-content-center">
+  <img src="/assets/images/Workinonit_erd.png" alt="Entity relationship diagram">
+</div>
+
+<p class="before-list">I also built on my knowledge of:</p>
+<ul>
+  <li><strong>scraping</strong> - I decided to incorporate the primary focus of the first project as a feature of this one, only this time with shorter, more reusable methods with more specific jobs</li>
+  <li>CSS, this time using <strong>SCSS</strong> to streamline specification of styles using complex hierarchical selectors, as well as incorporate variables (making it much easier to manage a colour theme) and even a function</li>
+  <li><strong>JavaScript</strong>/JQuery, using scripts to:</li>
+    <ul>
+      <li>ask for confirmation before deleting data</li>
+      <li>play a J Dilla track (adapting the script I used on CS50 problem set project <a href="https://nihongooo.yndajas.co/" target="_blank">Nihongooo!</a>)</li>
+      <li>prepend "https://" in URL fields if not provided</li>
+      <li>require at least one checkbox in a form before submission</li>
+      <li>require at least one input - URL or textarea - to have data before form submission</li>
+      <li>tidy up the URL after OAuth authentication, getting rid of ugly suffixes like "#_=_" or just "#" from Facebook and Google</li>
+      <li>toggle a feedback field that should only be available for unsuccessful applications</li>
+    </ul>
+  <li>how often to <strong>commit</strong>. I was aware that in previous projects I'd committed too little, often providing long, multi-line commit messages describing a bunch of changes. This time, I tried to keep changes down to what I could usefully describe within one succinct commit message. I didn't always succeed, and sometimes the commits felt too small, but it feels like a step in the right direction</li>
+</ul>
+
+<h4>Production pitfalls, deployment dangers</h4>
+
+<p>As per the last project, I decided to deploy the app to a production environment using Heroku. This brought with it a number of challenges that I had to overcome in order to get a working product.</p>
+
+<p>The first was getting the <strong>PostgreSQL</strong> database set up. This took a while, but this time I managed to get it working fairly consistently in development, test and production environments - next time I might try using PostgreSQL from the start rather than switching at the point of deployment</p>
+
+<p>The second challenge was getting Heroku to <strong>build</strong> the app successfully. Heroku errored out of the build process, saying there was a problem with precompiling assets. This was a bit of a red herring - I ended up reading a number of threads on issues with CSS/SCSS file extensions and other stuff related to the contents of the asset folder, when the actual issue was the approach I was taking to providing app IDs and secrets in the OmniAuth config. In the end I needed to switch from using credentials.yml.enc to environment variables in .env locally and config variables in Heroku.</p>
+
+<p>Once the build passed, when trying to open the app I once again faced Heroku's <strong>H10</strong> errors, which provide very little detail about their cause. With very little information, it's hard to know where to look for solutions - H10 errors can be almost anything. In the end, I discovered a help page from Heroku which suggests specific code for your <strong>puma.rb</strong> file in the config folder, which differs to the default Rails code, as well as a different <strong>Procfile</strong> bootup command to the one they suggest on their main guide to getting started with Rails 5 on Heroku. Unclear or incomplete guidance that makes too many assumptions of the reader seems to be a recurring issue... but after making those changes, the app launched successfully!</p>
+
+<p>With a working app, I decided to sort out <strong>OAuth</strong> to work in the live environment. This was surprisingly easy (after having dealt with the environment/config variables earlier)! It mostly involved telling each provider the new domain and callback details. With Google, getting it working with any Google account rather than pre-specified ones will require sorting out a privacy policy and submitting it for approval, but otherwise this step didn't cause much frustration!</p>
+
+<p>The last issue, and a minorly app-breaking one, is that <strong>scraping</strong> can work quite differently - or not at all - when working outside of a local environment. In local testing, everything was (is) working great, but in the live environment, scraping produced a bunch of internal server errors. The main issue here was websites denying permission to scrape their pages. Not content leaving a negative experience for the hordes of users waiting to manage their job applications on Workinonit, I spent an extra few hours working through these issues, eventually adding in some error/exception handling within the scraper class. This logic rescues the app from crashing if it encounters errors when scraping content. I'd already implemented <code>before</code>-<code>rescue</code>-<code>end</code> exception handling for user-provided URLs, so this was mostly a case of taking that and extending it to deal with other scraping features. Having more but smaller scraping methods made it a bit easier to address these issues without rewriting existing logic. Unfortunately these HTTP errors mean that scraping works inconsistently for two of the three providers - sometimes they deny requests and sometimes they don't - and these are the only two that provide proper non-UK job coverage, but at least the internal server errors are fixed!</p>
+
+<hr>
+
+<p>Below is a demo of the app, which is hosted on Heroku and can be accessed via <a href="http://workinonit.yndajas.co" target="_blank">workinonit.yndajas.co</a> (you will be redirected to Heroku).</p>
+
+<p> </p>
+<p style="position: relative; padding: 30px 0px 57% 0px; height: 0; overflow: hidden;"><iframe src="https://www.youtube.com/embed/PYwX1QGj6os" width="100%" height="100%" frameborder="0" style="display: block; margin: 0px auto; position: absolute; top: 0; left: 0;" allowfullscreen></iframe></p>
+<p> </p>
