@@ -14,7 +14,8 @@ categories: coding
   <li>RESTful API routes</li>
 </ul>
 
-<p class="before-list">Though not required, I tried to incorporate Flatiron JavaScript into the last two projects where it made sense to do so, and previously wrote a Chrome extension as the final project for CS50. However, this was the first time I used JavaScript:</p>
+<p class="before-list">Though not required, I tried to incorporate JavaScript into the last two projects where it made sense to do so, and previously wrote a Chrome extension as the final project for CS50. However, this was the first time I
+  used JavaScript:</p>
 <ul>
   <li>to control the vast majority of the frontend view rendering</li>
   <li>to handle server communication</li>
@@ -23,11 +24,17 @@ categories: coding
 
 <h4>The app</h4>
 
-<p>After browsing through <a href="https://github.com/public-apis/public-apis" title="Public APIs" target="_blank">a long list of public APIs</a> for inspiration, I decided to build an app that would bring together three separate resources: jazz videos, cat images/GIFs and jokes. The app allows you to retrieve a random example of each of these resources and choose whether to save it to your collection.</p>
+<p>After browsing through <a href="https://github.com/public-apis/public-apis" title="Public APIs" target="_blank">a long list of public APIs</a> for inspiration, I decided to build an app that would bring together three separate resources: jazz
+  videos, cat images/GIFs and jokes. The app allows you to retrieve a random example of each of these resources and choose whether to save it to your collection.</p>
 
 <p>For the cats and jokes, I decided to use a couple of APIs from the long list, while the jazz videos - a more familiar domain - would be self-curated with data persisted to the app's own API database.</p>
 
-<p>Continuing in the spirit of previous projects, I wanted to make an app that would actually be useable, rather than <i>just</i> a tech demo (even if that's one of the main purposes). A key component of making a usable app in which users can save and review collections of resources is - rather obviously - a user model. I decided to include this in the API and use client-server communication to handle user and session management. Initially I planned on using standard Rails session management, but setting up sessions is complicated by the stripped-back Rails setup for APIs. In the end, I built a custom token-based authorisation system that would prevent access to user-specific API endpoints without a unique access token. Attempting to access a user's data directly via the API's endpoints, e.g. at <a href="https://jazzcatcom.herokuapp.com/users/1/cats" title="Example user data endpoint" target="_blank">jazzcatcom.herokuapp.com/users/1/cats</a>, will render an error, and any AJAX requests made to read or create user resources (essentially anything except the <a href="https://jazzcatcom.herokuapp.com/jazz-videos" title="Jazz videos index" target="_blank">index of all jazz videos</a>) will likewise fail without the user's access token provided as a header.</p>
+<p>Continuing in the spirit of previous projects, I wanted to make an app that would actually be useable, rather than <i>just</i> a tech demo (even if that's one of the main purposes). A key component of making a usable app in which users can save
+  and review collections of resources is - rather obviously - a user model. I decided to include this in the API and use client-server communication to handle user and session management. Initially I planned on using standard Rails session
+  management, but setting up sessions is complicated by the stripped-back Rails setup for APIs. In the end, I built a custom token-based authorisation system that would prevent access to user-specific API endpoints without a unique access token.
+  Attempting to access a user's data directly via the API's endpoints, e.g. at <a href="https://jazzcatcom.herokuapp.com/users/1/cats" title="Example user data endpoint" target="_blank">jazzcatcom.herokuapp.com/users/1/cats</a>, will render an error,
+  and any AJAX requests made to read or create user resources (essentially anything except the <a href="https://jazzcatcom.herokuapp.com/jazz-videos" title="Jazz videos index" target="_blank">index of all jazz videos</a>) will likewise fail without
+  the user's access token provided as a header.</p>
 
 <p>The final entity relationship diagram for the API backend is below; you can also open the diagram as <a href="/assets/resources/JazzCatCom_erd.pdf" target="_blank">a PDF</a>.</p>
 
@@ -35,14 +42,20 @@ categories: coding
   <img src="/assets/images/JazzCatCom_erd.png" alt="Entity relationship diagram">
 </div>
 
-<p>On the frontend side, it took a while to build an understanding of how object-oriented JavaScript would fit within the app as a whole without simply duplicating the functionality of the backend. The Flatiron module on vanilla JavaScript covers the syntax (both using ES6 syntactic sugar and the more traditional constructor function syntax), but it does so in a few pretty brief sections towards the end without much discussion of how it actually fits into a full-scale project. After reviewing a number of other student's JavaScript project repositories, I identified a number of patterns that hadn't been covered in the curriculum, most notably separating out JavaScript files and classes into an overarching app file/class, one or more adapters, and classes for each resource which - adhering to separation of concerns principles - would focus on rendering logic.</p>
+<p>On the frontend side, it took a while to build an understanding of how object-oriented JavaScript would fit within the app as a whole without simply duplicating the functionality of the backend. The Flatiron module on vanilla JavaScript covers the
+  syntax (both using ES6 syntactic sugar and the more traditional constructor function syntax), but it does so in a few pretty brief sections towards the end without much discussion of how it actually fits into a full-scale project. After reviewing a
+  number of other student's JavaScript project repositories, I identified a number of patterns that hadn't been covered in the curriculum, most notably separating out JavaScript files and classes into an overarching app file/class, one or more
+  adapters, and classes for each resource which - adhering to separation of concerns principles - would focus on rendering logic.</p>
 
-<p>Initially I built adapters corresponding to each resource, but in the end - following the DRY principle - I abstracted the logic into a single adapter class. The app is not totally DRY, and the main JavaScript app class feels like it could adhere to the separation of concerns principle better if I introduced additional helper classes, but throughout the build process I tried to identify areas in which abstraction could DRY both the frontend object-oriented JavaScript code and the backend Rails code.</p>
+<p>Initially I built adapters corresponding to each resource, but in the end - following the DRY principle - I abstracted the logic into a single adapter class. The app is not totally DRY, and the main JavaScript app class feels like it could adhere
+  to the separation of concerns principle better if I introduced additional helper classes, but throughout the build process I tried to identify areas in which abstraction could DRY both the frontend object-oriented JavaScript code and the backend
+  Rails code.</p>
 
 <hr>
 
-<p>Below is a demo of the app, which is hosted on Heroku and can be accessed via <a href="http://jazzcatcom.yndajas.co" target="_blank">jazzcatcom.yndajas.co</a> (you will be redirected to GitHub).</p>
+<p>Below is a demo of the app, which is hosted on Heroku and GitHub (Pages) and can be accessed via <a href="http://jazzcatcom.yndajas.co" target="_blank">jazzcatcom.yndajas.co</a> (you will be redirected to GitHub).</p>
 
 <p> </p>
-<p style="position: relative; padding: 30px 0px 57% 0px; height: 0; overflow: hidden;"><iframe src="https://www.youtube.com/embed/x-QS4K6tN78" width="100%" height="100%" frameborder="0" style="display: block; margin: 0px auto; position: absolute; top: 0; left: 0;" allowfullscreen></iframe></p>
+<p style="position: relative; padding: 30px 0px 57% 0px; height: 0; overflow: hidden;"><iframe src="https://www.youtube.com/embed/x-QS4K6tN78" width="100%" height="100%" frameborder="0"
+    style="display: block; margin: 0px auto; position: absolute; top: 0; left: 0;" allowfullscreen></iframe></p>
 <p> </p>
