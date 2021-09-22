@@ -1,0 +1,61 @@
+---
+title: "Scaling the Flatiron summit with StackStore: running with React, Redux and Rails"
+date: 2021-09-22
+layout: default
+categories: coding
+---
+
+<p>Having paced through three projects on Sinatra, Rails and JavaScript earlier in the year, I took a little longer to work through the curriculum and get started on the final Flatiron project, which is focused on React and Redux. After initially
+  setting up the Rails API backend a few weeks ago, I took some time refamiliarise myself with the structure and flow of React/Redux apps by watching through the majority of a live build demo. I gradually started building out the structure of the
+  app, then - as usual - couldn't stop once I got into the flow of things.</p>
+
+<p class="before-list">The task for the final project is to build a React/Redux app with a Rails API backend. I decided to create StackStore, a simple application for finding, keeping, tagging and making notes on Stack Overflow questions. With
+  StackStore, you can:</p>
+
+<ul>
+  <li>search for Stack Overflow questions by title</li>
+  <li>view questions and answers</li>
+  <li>save questions to your own store</li>
+  <li>add tags and notes to questions and view questions by tag</li>
+</ul>
+
+<p>It seems like a fairly simple app when you list the features - and the entity relationship diagram below is indeed much simpler than my last few apps - but some of the best apps are narrow in scope. The entity relationship diagram below is for the
+  API backend; you can also open the diagram as <a href="/assets/resources/StackStore_erd.pdf" target="_blank">a PDF</a>.</p>
+
+<div class="container d-flex justify-content-center">
+  <img src="/assets/images/StackStore_erd.png" alt="Entity relationship diagram">
+</div>
+
+<p>With this app, I was more interested in doing one or a few jobs well than doing lots of jobs. I wanted to make the most of React, Redux and various packages in order to develop a more streamlined and straightforward user experience
+  than in previous projects. The use of state, props and components in a React/Redux framework allows you to provide interactive features and responsive data (i.e. retrieval and manipulation) without requiring a bunch of reloads as with a traditional
+  model-view-controller app, or highly complex and custom code as with a vanilla JavaScript single page app.</p>
+
+<p class="before-list">The full requirements for the project were as follows:</p>
+
+<ul>
+  <li>use of ES6 syntax</li>
+  <li>use of <code>create-react-app</code></li>
+  <li>one HTML page to render the app - I ended up with two, one of which is a 404 used to run a redirect script (not my own) when GitHub Pages tries to load a route via a non-existent HTML file</li>
+  <li>at least five stateless components and three routes - I ended up with many stateless components and seven routes: home/login, about, saved questions, edit question, tags, saved questions by tag and search</li>
+  <li>RESTful routing using React Router</li>
+  <li>use of Redux middleware to control state - I used this except for managing the values of controlled forms before submission</li>
+  <li>async actions with fetch requests using Redux Thunk</li>
+  <li>Rails API with standard JavaScript <code>fetch</code> syntax (not jQuery)</li>
+  <li>display handled by front-end</li>
+  <li>styling</li>
+</ul>
+
+<p>Throughout my Flatiron journey, I tended to have an initial sense of challenge about the projects and their requirements, not least because they often require putting together a number of different elements that the taught curriculum has covered
+  in isolation. However, despite the challenge, I've always pushed myself to make a useable product and in the process learn new stuff as my idea would organically evolve during the development process. As a result, I end up feeling pretty confident
+  by
+  the end of each project, not only in want I've learnt through the curriculum, but in full-stack development and coding more broadly. Now it's time to advance the challenge one step further as I start looking for opportunities to pursue a
+  professional career in coding.</p>
+
+<hr>
+
+<p>Below is a demo of the app, which is hosted on Heroku and GitHub (Pages) and can be accessed via <a href="http://stackstore.yndajas.co" target="_blank">stackstore.yndajas.co</a> (you will be redirected to GitHub).</p>
+
+<p> </p>
+<p style="position: relative; padding: 30px 0px 57% 0px; height: 0; overflow: hidden;"><iframe src="https://www.youtube.com/embed/47qTNiLzgQU" width="100%" height="100%" frameborder="0"
+    style="display: block; margin: 0px auto; position: absolute; top: 0; left: 0;" allowfullscreen></iframe></p>
+<p> </p>
